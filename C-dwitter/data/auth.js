@@ -1,16 +1,27 @@
 import { response } from 'express';
-import jwt from 'jsonwebtoken';
 
-const member = [{
-    'username': 'eon123',
-    'password': '12345',
-    'name': 'eon',
-    'email': 'eon02@naver.com',
-    'url': ''
+
+let member = [{
+    username: 'eon123',
+    password: '12345',
+    name: 'eon',
+    email: 'eon02@naver.com',
+    url: '',
+    id: '1'
+},
+{
+    username: 'eon',
+    password: '12345',
+    name: 'eon',
+    email: 'eon02@naver.com',
+    url: '',
+    id: '2'
 }];
 
-const secret = 'iaoojnivioajsioj901';
 
+////////////////////////////// MEMBER///////////////////////////
+////////////////////////////// MEMBER///////////////////////////
+////////////////////////////// MEMBER///////////////////////////
 export async function createMember(username, password, name, email, url) {
     const inputMember =
     {
@@ -18,49 +29,41 @@ export async function createMember(username, password, name, email, url) {
         password,
         name,
         email,
-        url
+        url,
+        id: Date.now().toString()
     }
 
 
+
     member.push(inputMember);
-    console.log(member);
     return inputMember;
 
 }
 
+
+export async function findByusername(username) {
+
+    return member.find((m) => m.username === username);
+}
+
+export async function findById(id) {
+    return member.find((m) => m.id === id);
+}
+
+////////////////////////////// login///////////////////////////
+////////////////////////////// login///////////////////////////
+////////////////////////////// login///////////////////////////
+
 export async function login(username, password) {
     const idCheck = member.find((m) => m.username === username);
-    var boolean;
-    if (idCheck !== null) {
-        boolean =  await passwordCheck(idCheck, password);
+    if (idCheck) {
+        return passwordCheck(password);
+
     } else {
-        boolean = false;
-
+        return null;
     }
-    return boolean;
-
 }
 
-export async function passwordCheck(idCheck, password) {
-
-    var boolean;
-    if (idCheck.password === password) {
-        boolean = true;
-    } else {
-        boolean = false;
-    }
-    return boolean;
-}
-
-export async function getToken(){
-    
-    const token = jwt.sign({
-        id: 'userId',
-        isAdmin: true,
-    }, sercret);
-    return token;
-}
-
-export async function verifyToken(token){
-    
+export async function passwordCheck(password) {
+    return member.find((m) => m.password === password);
 }

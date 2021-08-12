@@ -1,5 +1,7 @@
 import express from 'express';
 import 'express-async-errors';
+import { isAuth } from '../middleware/auth.js';
+
 
 import * as tweetController from '../controller/tweet.js';
 
@@ -10,13 +12,13 @@ const router = express.Router();
 router
     .route('/')
     .get(tweetController.getTweets)
-    .post(tweetController.createTweet);
+    .post(isAuth, tweetController.createTweet);
 
 router
     .route('/:id')
-    .get(tweetController.getTweetById)
-    .put(tweetController.updateTweet)
-    .delete(tweetController.deleteTweet);
+    .get(isAuth, tweetController.getTweetById)
+    .put(isAuth, tweetController.updateTweet)
+    .delete(isAuth, tweetController.deleteTweet);
 
 
 

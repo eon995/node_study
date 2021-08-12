@@ -44,3 +44,7 @@ export async function deleteTweet(req, res, next) {
 
     res.sendStatus(204);
 }
+
+export async function getToken(id) {
+    return jwt.sign({ id }, secret, { expiresIn: '2d' })
+}
