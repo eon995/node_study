@@ -7,9 +7,7 @@ import 'express-async-errors';
 import authRouter from './router/auth.js';
 import dotenv from 'dotenv';
 
-dotenv.config();
 
-console.log(process.env)
 
 const app = express();
 

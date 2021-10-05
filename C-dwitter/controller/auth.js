@@ -3,10 +3,11 @@ import jwt from 'jsonwebtoken';
 import { } from 'express-async-errors';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import { config } from '../config.js'
 
 dotenv.config();
 
-console.log(process.env.JWT_SECERET);
+
 
 export async function createMember(req, res, next) {
     const { username, password, name, email, url } = req.body;
@@ -35,7 +36,8 @@ export async function loginMember(req, res, next) {
 
 
 export async function getToken(id) {
-    return jwt.sign({ id }, secret, { expiresIn: jwtExpiresInDays })
+    console.log(config.jwt.sercretKey);
+    return jwt.sign({ id }, config.jwt.sercretKey, { expiresIn: config.jwt.expireIn })
 }
 
 export async function me(req, res, next) {
