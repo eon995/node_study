@@ -8,3 +8,6 @@ function increase() {
 function getCount() {
     return count;
 }
+
+module.exports.getCount = getCount;
+module.exports.increase = increase;
