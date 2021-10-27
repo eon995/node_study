@@ -29,8 +29,11 @@ export async function createTweet(req, res) {
 }
 
 export async function updateTweet(req, res) {
-    const { text, name, username } = req.body;
-    const tweet = tweetRepository.create(text, name, username);
+    const text = req.body.text;
+    const id = req.params.id;
+
+    const tweet = tweetRepository.update(id, text);
+
     res.status(201).json(tweet);
 }
 
