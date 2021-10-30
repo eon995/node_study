@@ -12,7 +12,7 @@ router.post('/test', authController.test);
 
 // router.get('/me', authController.me);
 
-// router.post('/login', authController.login);
+router.post('/login', authController.createAccount);
 
 // router.post('/signup', authController.signup);
 

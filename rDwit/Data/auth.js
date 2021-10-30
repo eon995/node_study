@@ -12,7 +12,6 @@ let accountList = [{
     username: 'Bob',
     email: 'abc456@gmail.com'
 }];
-
 //find ps by id (login)
 
 export function comparePassword(id, password) {
@@ -21,7 +20,17 @@ export function comparePassword(id, password) {
 
 
 //create account (sign up)
-export function createAccount() {
+export function createAccount(id, password, name, username, email) {
+    const account = {
+        id,
+        password,
+        name,
+        username,
+        email
+    };
+    accountList = [account, ...accountList];
+    return accountList;
 
 }
+
 
