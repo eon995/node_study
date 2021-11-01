@@ -10,7 +10,7 @@ const router = express.Router();
 
 const signupValidate =
     [
-        body('id').notEmpty().trim().isLength({ min: 2, max: 10 }).matches(/[a-z0-9]/),
+        body('id').notEmpty().trim().isLength({ min: 2, max: 10 }).withMessage("2글자이상 10글자이하로 입력해주세요").matches(/^[a-z0-9_-]/).withMessage("소문자 영문 및 숫자만 사용해주세요."),
         validate
     ];
 
@@ -23,7 +23,7 @@ router.post('/test', authController.test);
 
 // router.post('/login', authController.createAccount);
 
-router.post('/signup', authController.createAccount);
+router.post('/signup', signupValidate, authController.createAccount);
 
 
 
