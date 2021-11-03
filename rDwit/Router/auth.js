@@ -20,9 +20,8 @@ const signupValidate =
     ];
 
 
-const idRange = /[^a-z0-9]/g;
 
-router.post('/test', authController.test);
+
 
 // router.get('/me', authController.me);
 

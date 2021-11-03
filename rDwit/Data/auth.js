@@ -1,3 +1,6 @@
+import { response } from 'express';
+import { check } from 'express-validator';
+
 let accountList = [{
     id: 'abc123',
     password: '123123',
@@ -14,8 +17,16 @@ let accountList = [{
 }];
 //find ps by id (login)
 
-export function comparePassword(id, password) {
+export function checkId(id) {
     return accountList.find((t) => t.id == id);
+}
+
+export function checkUsername(username) {
+    return accountList.find((t) => t.username == username);
+}
+
+export function checkEmail(email) {
+    return accountList.find((t) => t.email == email);
 }
 
 
@@ -32,5 +43,19 @@ export function createAccount(id, password, name, username, email) {
     return accountList;
 
 }
+
+export function findOverlap(id, username, email) {
+    if (checkId(id)) {
+        return id;
+    } else if (checkUsername(username)) {
+        return username;
+    } else if (checkEmail) {
+        return email;
+    } else {
+        return 0;
+    }
+
+}
+
 
 
