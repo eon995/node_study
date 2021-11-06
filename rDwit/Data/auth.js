@@ -21,6 +21,16 @@ export function checkId(id) {
     return accountList.find((t) => t.id == id);
 }
 
+export function checkPassword(id, password) {
+    const check = checkId(id);
+    if (check) {
+        if (check.password == password) {
+            return check.password;
+        }
+    }
+    return 0;
+}
+
 export function checkUsername(username) {
     return accountList.find((t) => t.username == username);
 }
@@ -28,6 +38,7 @@ export function checkUsername(username) {
 export function checkEmail(email) {
     return accountList.find((t) => t.email == email);
 }
+
 
 
 //create account (sign up)
@@ -49,13 +60,15 @@ export function findOverlap(id, username, email) {
         return id;
     } else if (checkUsername(username)) {
         return username;
-    } else if (checkEmail) {
+    } else if (checkEmail(email)) {
         return email;
     } else {
         return 0;
     }
 
 }
+
+
 
 
 

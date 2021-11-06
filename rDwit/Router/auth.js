@@ -19,13 +19,19 @@ const signupValidate =
         validate
     ];
 
+const loginValidate =
+    [
+        body('id').notEmpty().trim().isLength({ min: 2, max: 10 }).withMessage("2글자이상 10글자이하로 입력해주세요").matches(/^[a-z0-9_-]/).withMessage("소문자 영문 및 숫자만 사용해주세요."),
+        body('password').notEmpty().trim().isLength({ min: 2, max: 10 }).withMessage("2글자이상 10글자이하로 입력해주세요")
+    ]
+
 
 
 
 
 // router.get('/me', authController.me);
 
-// router.post('/login', authController.createAccount);
+router.post('/login', loginValidate, authController.Login);
 
 router.post('/signup', signupValidate, authController.createAccount);
 
