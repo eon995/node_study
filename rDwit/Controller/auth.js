@@ -1,9 +1,11 @@
 import * as authRepository from '../Data/auth.js';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 
 const jwtSecretKey = 'lodjojasdonme12';
 const jwtexpiresInDays = '2d';
+const bcryptSaltRounds = 12;
 
 
 export async function createAccount(req, res) {
@@ -15,8 +17,8 @@ export async function createAccount(req, res) {
     if (found) {
         return res.status(409).json({ message: `${found}가 이미 있습니다.` });
     }
-
-    const account = await authRepository.createAccount(id, password, name, username, email);
+    const hashed = await bcrypt.hash(password, bcryptSaltRounds);
+    const account = await authRepository.createAccount({ id, password: hashed, name, username, email });
 
     const token = createJwtToken(account.id);
 
@@ -33,12 +35,24 @@ export async function createAccount(req, res) {
 export function Login(req, res) {
     const { id, password } = req.body;
 
-    const check = authRepository.checkPassword(id, password);
-    if (!check) {
-        return res.status(401).json({ message: 'id 혹은 password 가 틀렸습니다.' })
+    const hashed = authRepository.findPasswordById(id);
+    if (!hashed) {
+        return res.status(401).json({ message: '존재하지 않는 id 입니다.' })
     }
 
-    return res.status(200).json({ message: ' 로그인 성공' });
+    const check = bcrypt.compareSync(password, hashed, function (err, result) {
+
+    });
+
+    if (!check) {
+        res.status(401).json({ message: '비밀번호가 틀렸습니다.' })
+    }
+
+
+
+    const token = createJwtToken(account.id);
+
+    return res.status(200).json({ token, message: ' 로그인 성공' });
 }
 
 async function createJwtToken(id) {

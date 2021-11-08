@@ -1,5 +1,6 @@
 import { response } from 'express';
 import { check } from 'express-validator';
+import bcrypt from 'bcrypt';
 
 let accountList = [{
     id: 'abc123',
@@ -24,11 +25,18 @@ export function checkId(id) {
 export function checkPassword(id, password) {
     const check = checkId(id);
     if (check) {
-        if (check.password == password) {
-            return check.password;
-        }
+        bcrypt.compareSync(password, check.password);
+        return check.password;
     }
     return 0;
+}
+
+export function findPasswordById(id) {
+    const account = checkId(id);
+    if (account) {
+        return account.password;
+    }
+    return null;
 }
 
 export function checkUsername(username) {
@@ -43,6 +51,8 @@ export function checkEmail(email) {
 
 //create account (sign up)
 export function createAccount(id, password, name, username, email) {
+
+
     const account = {
         id,
         password,
