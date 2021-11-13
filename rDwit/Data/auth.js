@@ -18,39 +18,42 @@ let accountList = [{
 }];
 //find ps by id (login)
 
-export function checkId(id) {
-    return accountList.find((t) => t.id == id);
+export async function checkId(id) {
+
+    return accountList.find((t) => t.id == id) || null;
 }
 
-export function checkPassword(id, password) {
+export async function checkPassword(id, password) {
     const check = checkId(id);
     if (check) {
-        bcrypt.compareSync(password, check.password);
         return check.password;
     }
     return 0;
 }
 
-export function findPasswordById(id) {
-    const account = checkId(id);
-    if (account) {
-        return account.password;
+export async function findPasswordById(id) {
+    const check = checkId(id);
+    if (check) {
+        console.log(check.password);
+        return check.password;
     }
-    return null;
+    return 0;
 }
 
-export function checkUsername(username) {
-    return accountList.find((t) => t.username == username);
+export async function checkUsername(username) {
+    const check = accountList.find((t) => t.username == username);
+    return check || null;
 }
 
-export function checkEmail(email) {
-    return accountList.find((t) => t.email == email);
+export async function checkEmail(email) {
+    const check = accountList.find((t) => t.email == email);
+    return check || null;
 }
 
 
 
 //create account (sign up)
-export function createAccount(id, password, name, username, email) {
+export async function createAccount(id, password, name, username, email) {
 
 
     const account = {
@@ -65,12 +68,19 @@ export function createAccount(id, password, name, username, email) {
 
 }
 
-export function findOverlap(id, username, email) {
-    if (checkId(id)) {
+export async function findOverlap(id, username, email) {
+    const checkI = await checkId(id);
+    const checkU = await checkUsername(username);
+    const checkE = await checkEmail(email);
+
+
+    if (checkI) {
+        console.log(checkI);
+        console.log(checkU);
         return id;
-    } else if (checkUsername(username)) {
+    } else if (checkU) {
         return username;
-    } else if (checkEmail(email)) {
+    } else if (checkE) {
         return email;
     } else {
         return 0;

@@ -17,7 +17,9 @@ export async function createAccount(req, res) {
     if (found) {
         return res.status(409).json({ message: `${found}가 이미 있습니다.` });
     }
-    const hashed = await bcrypt.hash(password, bcryptSaltRounds);
+    const hashed = await bcrypt.hash(password, bcryptSaltRounds, function (err, hash) {
+        // Store hash in your password DB.
+    });
     const account = await authRepository.createAccount({ id, password: hashed, name, username, email });
 
     const token = createJwtToken(account.id);
@@ -32,19 +34,20 @@ export async function createAccount(req, res) {
 
 
 
-export function Login(req, res) {
+export async function Login(req, res) {
     const { id, password } = req.body;
 
     const hashed = authRepository.findPasswordById(id);
+
     if (!hashed) {
-        return res.status(401).json({ message: '존재하지 않는 id 입니다.' })
+        res.status(400).json({ message: '존재하지 않는 id 입니다.' });
     }
 
-    const check = bcrypt.compareSync(password, hashed, function (err, result) {
-
+    const check = await bcrypt.compare(password, hashed, function (err, result) {
+        // result == true or false
     });
 
-    if (!check) {
+    if (check) {
         res.status(401).json({ message: '비밀번호가 틀렸습니다.' })
     }
 
