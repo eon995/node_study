@@ -3,6 +3,7 @@ import 'express-async-errors';
 import * as authController from '../Controller/auth.js';
 import { body } from 'express-validator';
 import { validate } from '../middleware/validate.js';
+import { isAUth } from '../middleware/auth.js';
 
 
 
@@ -27,13 +28,11 @@ const loginValidate =
 
 
 
-
-
-// router.get('/me', authController.me);
-
 router.post('/login', loginValidate, authController.Login);
 
 router.post('/signup', signupValidate, authController.createAccount);
+
+router.get('/me', isAUth, authController.me);
 
 
 

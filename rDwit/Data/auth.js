@@ -57,7 +57,7 @@ export async function createAccount(id, password, name, username, email) {
 
 
     const account = {
-        id,
+        id: id,
         password,
         name,
         username,

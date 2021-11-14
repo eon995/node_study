@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 
-const jwtSecretKey = 'lodjojasdonme12';
+export const jwtSecretKey = 'lodjojasdonme12';
 const jwtexpiresInDays = '2d';
 const bcryptSaltRounds = 12;
 
@@ -12,7 +12,8 @@ export async function createAccount(req, res) {
     const { id, password, name, username, email } = req.body;
 
 
-    const found = await authRepository.findOverlap(id, username, email);
+    const found
+        = await authRepository.findOverlap(id, username, email);
 
     if (found) {
         return res.status(409).json({ message: `${found}가 이미 있습니다.` });
@@ -53,13 +54,23 @@ export async function Login(req, res) {
 
 
 
-    const token = createJwtToken(account.id);
+    const token = createJwtToken(id);
+
+    console.log(token);
 
     return res.status(200).json({ token, message: ' 로그인 성공' });
 }
 
 async function createJwtToken(id) {
     return jwt.sign({ id }, jwtSecretKey, { expiresIn: jwtexpiresInDays });
+}
+
+export async function me(req, res, next) {
+    const user = await authRepository.checkId(req.userId);
+    if (!user) {
+        return res.status(404).json({ message: '유저없음' });
+    }
+    res.status(200).json({ token: req.token, id: user.id })
 }
 
 
