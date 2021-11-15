@@ -53,18 +53,11 @@ export async function checkEmail(email) {
 
 
 //create account (sign up)
-export async function createAccount(id, password, name, username, email) {
+export async function createAccount(account) {
+    const created = { ...account };
+    accountList.push(account);
 
-
-    const account = {
-        id: id,
-        password,
-        name,
-        username,
-        email
-    };
-    accountList = [account, ...accountList];
-    return accountList;
+    return created.id;
 
 }
 

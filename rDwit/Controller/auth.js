@@ -18,12 +18,19 @@ export async function createAccount(req, res) {
     if (found) {
         return res.status(409).json({ message: `${found}가 이미 있습니다.` });
     }
-    const hashed = await bcrypt.hash(password, bcryptSaltRounds, function (err, hash) {
+    const hashed = bcrypt.hashSync(password, bcryptSaltRounds, function (err, hash) {
+        if (err) {
+            console.log(err);
+        }
+
         // Store hash in your password DB.
     });
+
+    console.log(hashed);
+
     const account = await authRepository.createAccount({ id, password: hashed, name, username, email });
 
-    const token = createJwtToken(account.id);
+    const token = await createJwtToken(account.id);
 
     console.log(token);
 
@@ -54,15 +61,23 @@ export async function Login(req, res) {
 
 
 
-    const token = createJwtToken(id);
+    const token = await createJwtToken(id);
 
-    console.log(token);
+
 
     return res.status(200).json({ token, message: ' 로그인 성공' });
 }
 
 async function createJwtToken(id) {
-    return jwt.sign({ id }, jwtSecretKey, { expiresIn: jwtexpiresInDays });
+    const token = jwt.sign({ id }, jwtSecretKey, { expiresIn: jwtexpiresInDays }, function (err, token) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(token);
+        }
+    });
+
+    return token;
 }
 
 export async function me(req, res, next) {

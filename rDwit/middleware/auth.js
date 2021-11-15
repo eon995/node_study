@@ -14,10 +14,8 @@ export const isAUth = async (req, res, next) => {
 
 
 
-    const token = authHeader.split(' ')[1];
+    const token = await authHeader.split(' ')[1];
 
-    console.log(token);
-    console.log(jwtSecretKey);
 
     jwt.verify(
         token,
@@ -27,7 +25,12 @@ export const isAUth = async (req, res, next) => {
                 console.log(error);
                 return res.status(401).json(AUTH_ERROR2);
             }
+            console.log(decoded.id);
+
+
             const user = await userRepository.checkId(decoded.id);
+
+            console.log(user);
             if (!user) {
                 return res.status(401).json(AUTH_ERROR3);
             }
