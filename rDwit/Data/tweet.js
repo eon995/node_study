@@ -1,17 +1,17 @@
 let tweets = [
     {
-        id: '1',
+        id: 'abc123',
         text: '언재 파일',
         createdAt: Date.now().toString(),
-        name: 'Bob',
-        username: 'bob'
+        name: 'eon',
+        username: 'Eon'
     },
     {
-        id: '2',
+        id: 'abc456',
         text: '언재2 파일',
         createdAt: Date.now().toString(),
-        name: 'Eon',
-        username: 'eon'
+        name: 'bob',
+        username: 'Bob'
     }
 ];
 
@@ -20,16 +20,17 @@ export function getAll() {
 }
 
 export function getAllByUsername(username) {
-    return tweets.filter((t) => t.username == username);
+    return tweets.filter((t) => t.username == username) || null;
 }
 
 export function getById(id) {
-    return tweets.find((t) => t.id == id);
+    return tweets.find((t) => t.id == id) || null;
 }
 
-export function create(text, name, username) {
+export function create(text, name, username, userId) {
+    console.log("유저" + userId);
     const tweet = {
-        id: Date.now().toString(),
+        id: userId,
         text,
         createdAt: new Date(),
         username,

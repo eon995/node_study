@@ -8,23 +8,24 @@ export async function getTweets(req, res) {
     } else {
         res.status(200).json(tweetRepository.getAll());
     }
-    res.status(200).json(data);
 
 }
 
 export async function getTweet(req, res) {
     const id = req.params.id;
     const tweet = tweetRepository.getById(id);
+
+    console.log(Id);
     if (tweet) {
-        res.status(200).json(tweet);
-    } else {
-        res.status(404).send('id not found');
+        return res.status(200).json(tweet);
     }
+    return res.status(400).json({ message: " id not found" })
 }
 
 export async function createTweet(req, res) {
+    const userId = req.userId;
     const { text, name, username } = req.body;
-    const tweet = tweetRepository.create(text, name, username);
+    const tweet = tweetRepository.create(text, name, username, userId);
     res.status(201).json(tweet);
 }
 
