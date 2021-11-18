@@ -33,6 +33,19 @@ export async function updateTweet(req, res) {
     const text = req.body.text;
     const id = req.params.id;
 
+    const getId = tweetRepository.getById(id);
+
+    if (!getId) {
+        res.status(404).json({ message: "id가 존재하지 않습니다." });
+    }
+    console.log(getId.id + req.userId);
+
+
+    if (getId.id !== req.userId) {
+        res.status(403).json({ message: "id가 달라 수정권한이 없습니다." })
+    }
+
+
     const tweet = tweetRepository.update(id, text);
 
     res.status(201).json(tweet);
@@ -40,7 +53,19 @@ export async function updateTweet(req, res) {
 
 export async function deleteTweet(req, res) {
     const id = req.params.id;
+    const getId = tweetRepository.getById(id);
+
+    if (!getId) {
+        res.status(404).json({ message: "id가 존재하지 않습니다." });
+    }
+    console.log(getId.id + req.userId);
+
+
+    if (getId.id !== req.userId) {
+        res.status(403).json({ message: "id가 달라 수정권한이 없습니다." })
+    }
+
     tweetRepository.remove(id);
-    res.sendStatus(204);
+    res.sendStatus(204).withMessage("삭제되었습니다.");
 }
 
