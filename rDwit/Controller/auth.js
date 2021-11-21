@@ -1,13 +1,10 @@
 import * as authRepository from '../Data/auth.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+import { config } from '../config.js';
 
-
-
-const jwtSecretKey = 'lodjojasdonme12';
-const jwtexpiresInDays = '2d';
-const bcryptSaltRounds = 12;
-
+dotenv.config();
 
 export async function createAccount(req, res) {
     const { id, password, name, username, email } = req.body;
@@ -19,7 +16,7 @@ export async function createAccount(req, res) {
     if (found) {
         return res.status(409).json({ message: `${found}가 이미 있습니다.` });
     }
-    const hashed = bcrypt.hashSync(password, bcryptSaltRounds, function (err, hash) {
+    const hashed = bcrypt.hashSync(password, config.bcrypt.saltRounds, function (err, hash) {
         if (err) {
             console.log(err);
         }
@@ -70,7 +67,9 @@ export async function Login(req, res) {
 }
 
 async function createJwtToken(id) {
-    const token = jwt.sign({ id }, jwtSecretKey, { expiresIn: jwtexpiresInDays }, function (err, token) {
+    console.log(config.jwt.secretKey);
+
+    const token = jwt.sign({ id }, config.jwt.secretKey, { expiresIn: config.jwt.expiresInSec }, function (err, token) {
         if (err) {
             console.log(err);
         } else {
