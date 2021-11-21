@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 
+
 const jwtSecretKey = 'lodjojasdonme12';
 const jwtexpiresInDays = '2d';
 const bcryptSaltRounds = 12;

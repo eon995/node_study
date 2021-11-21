@@ -4,6 +4,12 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import tweetRouter from './Router/tweet.js';
 import authRouter from './Router/auth.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+console.log(process.env.JWT_SECRET);
+
 
 const app = express();
 
